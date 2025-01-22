@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notes-app
+  namespace: notes
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: notes-app
+  template:
+    metadata:
+      labels:
+        app: notes-app
+        # admission.datadoghq.com/enabled: "true"
+      annotations:
+         ad.datadoghq.com/tags: '{"team": "containers"}'
+         admission.datadoghq.com/java-lib.version: "1.45.2"
+    spec:
+      containers:
+      - name: notes
+        image: jonlimpw/notes-java-app
+        env:
+          - name: DD_TRACE_DEBUG
+            value: 'true'
+        ports:
+        - containerPort: 8080

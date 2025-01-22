@@ -62,7 +62,19 @@ Making a request to the notes app:
 kubectl exec -it <AGENT_POD> -- curl -X POST '<POD_IP>:8080/notes?desc=Note'
 kubectl exec -it <AGENT_POD> -- curl <POD_IP>:8080/notes 
 ```
-
+### Library Injection
+Uncomment the following lines in the notes.yaml file:
+```
+# admission.datadoghq.com/enabled: "true"
+```
+Then redeploy the application:
+```
+kubectl apply -f notes.yaml
+```
+An init-container should be present on the pod:
+```
+kubectl describe pod -n notes
+```
 
 ### One-Step Instrumentation
 Uncomment the following lines in the values.yaml file:

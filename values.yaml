@@ -1,0 +1,41 @@
+datadog:
+  # apiKey: <DATADOG_API_KEY>
+  apiKeyExistingSecret: datadog-agent
+  clusterName: minikube
+  kubelet:
+    tlsVerify: false
+
+  kubeStateMetricsEnabled: false
+  kubeStateMetricsCore:
+    enabled: true
+
+  orchestratorExplorer:
+    enabled: true
+  logs:
+    enabled: true
+    containerCollectAll: true
+    autoMultiLineDetection: true
+  # apm:
+  #   instrumentation:
+  #     enabled: true
+
+  processAgent:
+    enabled: true
+    processCollection: true
+
+  clusterChecks:
+    enabled: true
+
+  ignoreAutoConfig:
+    - etcd
+    - kube_controller_manager 
+    - kube_scheduler 
+
+clusterAgent:
+  enabled: true
+  # confd:
+  #   http_check.yaml: |-
+  #     cluster_check: true
+  #     instances:
+  #       - name: Notes
+  #         url: http://notes-service.notes.svc.cluster.local/notes   
