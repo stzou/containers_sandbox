@@ -4,7 +4,7 @@ metadata:
   name: datadog-agent
 spec:
   destination:
-    namespace: default
+    namespace: argocd
     server: https://kubernetes.default.svc
   source:
     path: helm-charts/charts/datadog
@@ -22,3 +22,7 @@ spec:
           value: 'true'
   sources: []
   project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: https://github.com/stzou/containers_sandbox.git
     targetRevision: HEAD
-    path: datadog
+    path: ArgoCD/datadog
     directory:
       recurse: true
   destination:
