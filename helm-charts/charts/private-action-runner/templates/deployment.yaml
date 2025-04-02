@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "chart.fullname" . }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+    {{- include "chart.labels" . | nindent 4 }}
+spec:
+  minReadySeconds: 10
+  replicas: {{ $.Values.runner.replicas }}
+  selector:
+    matchLabels:
+      {{- include "chart.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "chart.labels" . | nindent 8 }}
+      annotations:
+        checksum/values: {{ $.Values | toJson | sha256sum }}
+    spec:
+      serviceAccountName: {{ include "chart.fullname" . }}
+      containers:
+        - name: runner
+          image: "{{ $.Values.image.repository }}:{{ $.Values.image.tag }}"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 9016
+          resources:
+            limits:
+              cpu: 250m
+              memory: 1Gi
+            requests:
+              cpu: 250m
+              memory: 1Gi
+          volumeMounts:
+            - name: secrets
+              mountPath: /etc/dd-action-runner
+            {{- range $_, $credentialSecret := $.Values.runner.credentialSecrets }}
+            - name: {{ $credentialSecret.secretName }}
+              mountPath: /etc/dd-action-runner/credentials/{{ $credentialSecret.directoryName }}
+            {{- end }}
+          {{- if $.Values.runner.env }}
+          env: {{ $.Values.runner.env | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if $.Values.runner.runnerIdentitySecret }}
+          envFrom:
+            - secretRef:
+                name: {{ $.Values.runner.runnerIdentitySecret }}
+          {{- end }}
+      volumes:
+        - name: secrets
+          secret:
+            secretName: {{ include "chart.fullname" . }}
+        {{- range $_, $credentialSecret := $.Values.runner.credentialSecrets }}
+        - name: {{ $credentialSecret.secretName }}
+          secret:
+            secretName: {{ $credentialSecret.secretName }}
+        {{- end }}

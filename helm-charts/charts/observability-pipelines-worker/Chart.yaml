@@ -1,0 +1,20 @@
+apiVersion: v2
+name: observability-pipelines-worker
+version: "2.4.2"
+description: Observability Pipelines Worker
+type: application
+keywords:
+  - observability
+  - logs
+  - metrics
+  - traces
+home: https://www.datadoghq.com
+icon: https://datadog-live.imgix.net/img/dd_logo_70x75.png
+maintainers:
+  - name: Datadog
+    email: support@datadoghq.com
+appVersion: "2.4.2"
+annotations:
+  artifacthub.io/links: |
+    - name: Chart Source
+      url: https://github.com/DataDog/helm-charts/tree/main/charts/observability-pipelines-worker
