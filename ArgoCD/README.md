@@ -2,6 +2,13 @@
 ### ArogCD 
 Argo CD (short for Argo Continuous Delivery) is a declarative GitOps tool for Kubernetes. It automates the deployment and management of Kubernetes resources by syncing them with what’s defined in a Git repository.
 
+| Use Case                              | Why Argo CD Helps                                                 |
+|---------------------------------------|-------------------------------------------------------------------|
+| **CI/CD for Kubernetes** apps         | Argo = CD, CI can be GitHub Actions, GitLab, etc.                |
+| Managing **multi-environment** setups | Dev, staging, prod — each tracked in Git                         |
+| Visibility into running apps          | See every resource, image version, diff from Git                 |
+| GitOps automation                     | No kubectl needed! Just push to Git and Argo CD does the rest    |
+
 ### Installing Argo CD
 Create a new namespace named ``argocd`` where argocd resources will live:
 ```
@@ -24,7 +31,7 @@ You can now log into the Argo CD server using a username and password.
 The username will default to ``admin`` and the password can be retrieved using:
 ```
 argocd admin initial-password -n argocd
-wYEu3pikdV1V5NnK
+W4Lt0uOJs1A6ACvN
 ```
 
 You can either log in from the CLI or from the UI.
