@@ -10,6 +10,10 @@ Argo CD (short for Argo Continuous Delivery) is a declarative GitOps tool for Ku
 | GitOps automation                     | No kubectl needed! Just push to Git and Argo CD does the rest    |
 
 ### Installing Argo CD
+Create a minikube profile:
+```
+minikube start --profile argo
+```
 Create a new namespace named ``argocd`` where argocd resources will live:
 ```
 kubectl create namespace argocd
@@ -185,6 +189,7 @@ kubectl apply -f argocd-server.yaml -n argocd
 ```
 kubectl delete -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 kubectl delete ns argocd
+minikube delete --profile argo
 ```
 
 References:
