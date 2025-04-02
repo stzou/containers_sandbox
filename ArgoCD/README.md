@@ -1,4 +1,7 @@
 
+### ArogCD 
+Argo CD (short for Argo Continuous Delivery) is a declarative GitOps tool for Kubernetes. It automates the deployment and management of Kubernetes resources by syncing them with what’s defined in a Git repository.
+
 ### Installing Argo CD
 Create a new namespace named ``argocd`` where argocd resources will live:
 ```
@@ -38,20 +41,25 @@ From UI:
 Settings -> Repositories -> Connect Repo
 Type:``git``
 Project:``default``
-Repository URL: ``https://github.com/DataDog/helm-charts.git``
+Repository URL: ``https://github.com/stzou/containers_sandbox.git``
 
+Create a secret for the API key:
+```
+kubectl create secret generic datadog-secret --from-literal api-key=...
+```
+Use the following YAML file in the UI:
 ```
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: dd-agent
+  name: datadog-agent
 spec:
   destination:
     namespace: default
     server: https://kubernetes.default.svc
   source:
-    path: charts/datadog
-    repoURL: https://github.com/DataDog/helm-charts.git
+    path: helm-charts/charts/datadog
+    repoURL: https://github.com/stzou/containers_sandbox.git
     targetRevision: HEAD
     helm:
       valueFiles:
@@ -59,15 +67,15 @@ spec:
       parameters:
         - name: datadog.apiKeyExistingSecret
           value: datadog-secret
-        - name: datadog.logs.containerCollectAll
-          value: 'true'
         - name: datadog.kubelet.tlsVerify
           value: 'false'
+        - name: datadog.logs.containerCollectAll
+          value: 'true'
   sources: []
   project: default
 ```
 
-**Guesbook**
+**Guestbook**
 From UI:
 Settings -> Repositories -> Connect Repo
 Type:``git``
@@ -161,11 +169,10 @@ The deployment files for each of these components can be found here:
 https://github.com/argoproj/argo-cd/blob/master/manifests/install.yaml
 These annotations have been added to the respective yaml files. Apply the annotations using:
 ```
-kubectl apply -f application-controller.yaml
-kubectl apply -f argocd-repo-server.yaml
-kubectl apply -f argocd-server.yaml
+kubectl apply -f application-controller.yaml -n argocd
+kubectl apply -f argocd-repo-server.yaml -n argocd
+kubectl apply -f argocd-server.yaml -n argocd
 ```
-
 
 ### Cleanup:
 ```
